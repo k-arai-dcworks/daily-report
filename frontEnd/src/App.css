@@ -1,0 +1,125 @@
+/* すべての要素の幅計算を安定させる */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background-color: #FAF7F2;
+  color: #793b01;
+}
+
+/* メインコンテナ：中央寄せ */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+
+  padding: 0 16px;
+}
+
+/* タイトル */
+.Title {
+  font-size: 3em;
+}
+
+/* =========================
+  横幅統一
+========================= */
+
+.form-area,
+.mail-work {
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* =========================
+  業務内容エリア
+========================= */
+
+.mail-work {
+  margin: 0 0 20px 0px;
+}
+
+.mail-work-add {
+  font-size: 2em;
+}
+
+/* =========================
+  入力エリア
+========================= */
+
+.form-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  position: relative; /* ボタンの基準 */
+}
+
+/* ラベル */
+.textbox-5-label {
+  display: block;
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+/* テキストエリア本体 */
+.textbox-5 {
+  width: 100%;
+
+  /* 最低でも高さ300pxに */
+  min-height: 300px;
+
+  padding: 10px 10px 10px 10px;
+
+  border: 1px solid #793b01;
+  color: #793b01;
+  border-radius: 10px;
+
+  background-color: #f5e5d1;
+
+  font-size: 1.2em;
+  line-height: 1.8;
+
+  resize: none;
+}
+
+/* フォーカス時 */
+.textbox-5:focus {
+  outline: 2px solid #793b01;
+}
+
+/* プレースホルダー */
+.textbox-5::placeholder {
+  color: #793b017e;
+}
+
+/* =========================
+  送信ボタン
+========================= */
+
+.send-button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  padding-right: 1px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #793b01;
+
+  cursor: pointer;
+}

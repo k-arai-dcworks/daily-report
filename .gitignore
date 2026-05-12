@@ -27,3 +27,4 @@ dist-ssr
 backEnd/target/
 frontEnd/node_modules/
 backEnd/target/classes/credentials.json
+.env
