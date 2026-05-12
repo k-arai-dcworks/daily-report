@@ -26,3 +26,4 @@ dist-ssr
 # Java build output
 backEnd/target/
 frontEnd/node_modules/
+backEnd/target/classes/credentials.json
