@@ -66,7 +66,7 @@ public class MailService {
                     javax.mail.Message.RecipientType.TO,
                     new InternetAddress("k.arai@dcworks.jp"));
 
-            email.setSubject("日報テスト");
+            email.setSubject("日報【5/25】新井一馬");
             email.setText(text);
 
             // ★⑥ エンコード

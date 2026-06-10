@@ -7,8 +7,8 @@ body {
   margin: 0;
   padding: 0;
 
-  background-color: #FAF7F2;
-  color: #793b01;
+  background-color: #1f1f20;
+  color: #e6e6e6;
 }
 
 /* メインコンテナ：中央寄せ */
@@ -46,6 +46,23 @@ body {
 
 .mail-work-add {
   font-size: 2em;
+  cursor: pointer;
+}
+
+.work-add-button {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  color: #e6e6e6;
+
+  background-color: #cfc83a00;
+
+  cursor: pointer;
 }
 
 /* =========================
@@ -76,11 +93,11 @@ body {
 
   padding: 10px 10px 10px 10px;
 
-  border: 1px solid #793b01;
-  color: #793b01;
+  border: 1px solid #e6e6e6;
+  color: #e6e6e6;
   border-radius: 10px;
 
-  background-color: #f5e5d1;
+  background-color: #323131;
 
   font-size: 1.2em;
   line-height: 1.8;
@@ -90,12 +107,12 @@ body {
 
 /* フォーカス時 */
 .textbox-5:focus {
-  outline: 2px solid #793b01;
+  outline: 2px solid #e6e6e6;
 }
 
 /* プレースホルダー */
 .textbox-5::placeholder {
-  color: #793b017e;
+  color: #e6e6e6;
 }
 
 /* =========================
@@ -119,7 +136,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  background-color: #793b01;
+  background-color: #e6e6e6;
 
   cursor: pointer;
 }

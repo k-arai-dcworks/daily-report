@@ -21,7 +21,6 @@ function App() {
         credentials: "include",
       });
 
-      // 200ならログイン済み
       return res.ok;
     } catch (e) {
       return false;
@@ -53,9 +52,19 @@ function App() {
     console.log(await res.text());
   };
 
-  // 業務内容ボタン押下時ウィンドウを出現
-  const openWindow = async () => {
-    
+  // 業務内容格納
+  const [works, setWorks] = useState([]);
+
+  // 業務内容ボタン押下時
+  const openWindow = () => {
+    setWorks((prev) => [...prev, { id: Date.now(), text: "" }]);
+  };
+
+  // 更新
+  const updateWork = (id, value) => {
+    setWorks((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, text: value } : w)),
+    );
   };
 
   // ログイン後処理
@@ -95,11 +104,23 @@ function App() {
         <label className="mail-work">
           <span className="textbox-5-label">業務内容</span>
           <div>
-            <IconContext.Provider value={{ className: "mail-work-add" }}>
-              <FiPlusCircle />
+            <IconContext.Provider value={{ size: "33px" }}>
+              <button className="work-add-button" onClick={openWindow}>
+                <FiPlusCircle />
+              </button>
             </IconContext.Provider>
           </div>
         </label>
+
+        <div>
+          {works.map((w) => (
+            <WorkTextbox
+              key={w.id}
+              value={w.text}
+              onChange={(e) => updateWork(w.id, e.target.value)}
+            />
+          ))}
+        </div>
 
         {/* 本文エリア */}
         <label>
@@ -113,7 +134,7 @@ function App() {
         </label>
 
         {/* 送信ボタン */}
-        <IconContext.Provider value={{ color: "#f5e5d1", size: "30px" }}>
+        <IconContext.Provider value={{ color: "#323131", size: "30px" }}>
           <button className="send-button" onClick={sendMail}>
             <IoMdSend />
           </button>
