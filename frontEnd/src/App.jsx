@@ -93,6 +93,10 @@ function App() {
     runAfterLogin();
   }, []);
 
+const res = await fetch("http://localhost:8080/api/tasks");
+const data = await res.json();
+console.log(data);
+
   // 画面表示
   return (
     <div className="container">
