@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.service.TaskService;
 import com.example.demo.entity.Task;
+import com.example.demo.service.TaskService;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -37,7 +37,7 @@ public class TaskController {
     }
 
     // 削除
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

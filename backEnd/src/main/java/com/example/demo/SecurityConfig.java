@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,8 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // ログイン不必要
                         .requestMatchers("/", "/error").permitAll()
+                        .requestMatchers("/api/**").permitAll() // API呼び出しではログイン不必要
 
                         // ログイン必須
                         .requestMatchers("/mail/**").authenticated()
@@ -37,7 +38,7 @@ public class SecurityConfig {
                 // ログイン機能
                 .oauth2Login(oauth2 -> oauth2
                         // ログイン成功したらここに戻る
-                        .defaultSuccessUrl("http://localhost:5173", true))
+                        .defaultSuccessUrl("http://localhost:5174", true))
                 
                 // 未ログイン時に401を返すs
                 .exceptionHandling(ex -> ex
@@ -54,7 +55,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Reactのアドレス
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5174"));
 
         // 使用可能操作
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

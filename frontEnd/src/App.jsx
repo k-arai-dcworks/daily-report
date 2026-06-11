@@ -1,110 +1,139 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import { IoMdSend } from "react-icons/io";
-import "./App.css";
 import { IconContext } from "react-icons";
 import { FiPlusCircle } from "react-icons/fi";
+import "./App.css";
 
-import { useEffect } from "react";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
+import WorkTextbox from "./components/WorkTextbox";
 
 function App() {
-  // setTextで文字を入れる
+  // =========================
+  // state管理
+  // =========================
   const [text, setText] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [works, setWorks] = useState([]);
 
+  // =========================
+  // DB取得処理
+  // =========================
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/tasks");
+      const data = await res.json();
+      setTasks(data);
+    } catch (e) {
+      console.error("fetchTasks error:", e);
+    }
+  };
+
+  // 初回ロード時に取得
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // =========================
   // ログイン確認
+  // =========================
   const checkLogin = async () => {
     try {
       const res = await fetch("http://localhost:8080/mail/me", {
         method: "GET",
         credentials: "include",
       });
-
       return res.ok;
     } catch (e) {
       return false;
     }
   };
 
+  // =========================
   // メール送信
+  // =========================
   const sendMail = async () => {
-    // ログイン確認
     const isLogin = await checkLogin();
 
-    // 未ログイン時の処理
     if (!isLogin) {
-      sessionStorage.setItem("draftMail", text); // 入力保持
-
+      sessionStorage.setItem("draftMail", text);
       window.location.href =
         "http://localhost:8080/oauth2/authorization/google";
       return;
     }
 
-    // ログイン済み時の処理
-    const res = await fetch("http://localhost:8080/mail/send", {
+    await fetch("http://localhost:8080/mail/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ text }),
     });
-
-    console.log(await res.text());
   };
 
-  // 業務内容格納
-  const [works, setWorks] = useState([]);
-
-  // 業務内容ボタン押下時
+  // =========================
+  // 業務内容UI
+  // =========================
   const openWindow = () => {
     setWorks((prev) => [...prev, { id: Date.now(), text: "" }]);
   };
 
-  // 更新
   const updateWork = (id, value) => {
     setWorks((prev) =>
       prev.map((w) => (w.id === id ? { ...w, text: value } : w)),
     );
   };
 
-  // ログイン後処理
+  // =========================
+  // ログイン後処理（下書き送信）
+  // =========================
   useEffect(() => {
     const runAfterLogin = async () => {
-      const res = await fetch("http://localhost:8080/mail/me", {
-        credentials: "include",
-      });
+      try {
+        const res = await fetch("http://localhost:8080/mail/me", {
+          credentials: "include",
+        });
 
-      if (!res.ok) return;
+        if (!res.ok) return;
 
-      const draft = sessionStorage.getItem("draftMail");
+        const draft = sessionStorage.getItem("draftMail");
+        if (!draft) return;
 
-      if (!draft) return;
+        await fetch("http://localhost:8080/mail/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ text: draft }),
+        });
 
-      await fetch("http://localhost:8080/mail/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ text: draft }),
-      });
-
-      sessionStorage.removeItem("draftMail");
+        sessionStorage.removeItem("draftMail");
+      } catch (e) {
+        console.error("runAfterLogin error:", e);
+      }
     };
 
     runAfterLogin();
   }, []);
 
-const res = await fetch("http://localhost:8080/api/tasks");
-const data = await res.json();
-console.log(data);
-
+  // =========================
   // 画面表示
+  // =========================
   return (
     <div className="container">
       <h1 className="Title">Daily Report Web</h1>
 
-      {/* 入力・ボタンエリア */}
+      <div style={{ padding: "20px" }}>
+        {/* タスク追加 */}
+        <TaskForm onAdd={fetchTasks} />
+
+        {/* タスク一覧 */}
+        <TaskList tasks={tasks} onDelete={fetchTasks} />
+      </div>
+
+      {/* 業務内容エリア */}
       <div className="form-area">
-        {/* 業務内容エリア */}
         <label className="mail-work">
           <span className="textbox-5-label">業務内容</span>
           <div>
@@ -126,7 +155,7 @@ console.log(data);
           ))}
         </div>
 
-        {/* 本文エリア */}
+        {/* 本文 */}
         <label>
           <span className="textbox-5-label">本文</span>
           <textarea
@@ -134,10 +163,10 @@ console.log(data);
             placeholder="本文を入力"
             value={text}
             onChange={(e) => setText(e.target.value)}
-          ></textarea>
+          />
         </label>
 
-        {/* 送信ボタン */}
+        {/* 送信 */}
         <IconContext.Provider value={{ color: "#323131", size: "30px" }}>
           <button className="send-button" onClick={sendMail}>
             <IoMdSend />
@@ -147,4 +176,5 @@ console.log(data);
     </div>
   );
 }
+
 export default App;
