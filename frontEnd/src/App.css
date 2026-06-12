@@ -3,6 +3,33 @@
   box-sizing: border-box;
 }
 
+/* =========================
+  グリッド操作エリア
+========================= */
+
+.grid-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 60% 40%;
+  margin-bottom: 10rem;
+  height: 100vh;
+}
+
+.grid-container-main {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 3rem 0;
+}
+
+.grid-container-preview {
+  grid-column: 2;
+  display: flexbox;
+  padding: 0 2rem 2rem 2rem;
+  margin-bottom: 3rem;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -11,19 +38,30 @@ body {
   color: #e6e6e6;
 }
 
-/* メインコンテナ：中央寄せ */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-
-  padding: 0 16px;
-}
-
 /* タイトル */
 .Title {
-  font-size: 3em;
+  margin-bottom: 4rem;
+  grid-column: 1 / 3;
+  display: flex;
+  font-size: 4em;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =========================
+  プレビューウィンドウ
+========================= */
+
+.preview-window {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background-color: #323131;
+  color: #b2b2b2;
+  border-radius: 20px;
+  border: 1px solid #ffffff33;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.2em;
 }
 
 /* =========================
@@ -44,25 +82,86 @@ body {
   margin: 0 0 20px 0px;
 }
 
+.mail-work-task {
+  display: flex;
+  padding: 0.5rem 0 0 0;
+  height: 3rem;
+}
+
+.mail-work-input {
+  padding: 10px 10px 10px 10px;
+
+  border: 1px solid #717171;
+  color: #e6e6e6;
+  border-radius: 10px;
+
+  background-color: #323131;
+
+  font-size: 1em;
+  line-height: 1.8;
+
+  resize: none;
+}
+
+/* フォーカス時 */
+.mail-work-input:focus {
+  outline: 0.2rem solid #bd96ff;
+}
+
 .mail-work-add {
   font-size: 2em;
   cursor: pointer;
 }
 
-.work-add-button {
-  width: 38px;
-  height: 38px;
-
+.addTask-btn {
   border: none;
-
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
+  size: 30rem;
   color: #e6e6e6;
-
   background-color: #cfc83a00;
-
   cursor: pointer;
+}
+
+.addTask-btn:hover {
+  color: #bd96ff;
+}
+
+/* =========================
+  業務内容リストエリア
+========================= */
+
+.mail-work-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+  gap: 1rem;
+  align-items: center;
+}
+
+.mail-work-list-btn {
+  margin: 0 0.5rem 0 0.5rem;
+  color: #717171;
+  background-color: #cfc83a00;
+  border: none;
+  cursor: pointer;
+}
+
+.mail-work-list-btn:hover {
+  color: #bd96ff;
+}
+
+.task-item {
+  display: flex;
+
+  justify-content: space-between;
+  border: 2px solid;
+  padding: 0.4rem 0 0.4rem 1rem;
+  border-color: #717171;
+  border-radius: 1rem;
+  align-items: center;
+}
+
+.task-item:hover {
+  border-color: #bd96ff;
 }
 
 /* =========================
@@ -93,7 +192,7 @@ body {
 
   padding: 10px 10px 10px 10px;
 
-  border: 1px solid #e6e6e6;
+  border: 1px solid #717171;
   color: #e6e6e6;
   border-radius: 10px;
 
@@ -107,12 +206,7 @@ body {
 
 /* フォーカス時 */
 .textbox-5:focus {
-  outline: 2px solid #e6e6e6;
-}
-
-/* プレースホルダー */
-.textbox-5::placeholder {
-  color: #e6e6e6;
+  outline: 0.2rem solid #bd96ff;
 }
 
 /* =========================
@@ -139,4 +233,8 @@ body {
   background-color: #e6e6e6;
 
   cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #bd96ff;
 }

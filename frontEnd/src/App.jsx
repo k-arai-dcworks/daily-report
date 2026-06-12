@@ -10,12 +10,15 @@ import "./App.css";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import WorkTextbox from "./components/WorkTextbox";
+import { Content } from "./components/Content";
 
 function App() {
   // =========================
   // state管理
   // =========================
-  const [text, setText] = useState("");
+  const [text1, setText1] = useState("");
+  const [text2, setText2] = useState("");
+  const [content, setContent] = useState(Content);
   const [tasks, setTasks] = useState([]);
   const [works, setWorks] = useState([]);
 
@@ -59,7 +62,7 @@ function App() {
     const isLogin = await checkLogin();
 
     if (!isLogin) {
-      sessionStorage.setItem("draftMail", text);
+      sessionStorage.setItem("draftMail", text1);
       window.location.href =
         "http://localhost:8080/oauth2/authorization/google";
       return;
@@ -69,7 +72,7 @@ function App() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text1 }),
     });
   };
 
@@ -121,57 +124,76 @@ function App() {
   // 画面表示
   // =========================
   return (
-    <div className="container">
+    <div className="grid-container">
       <h1 className="Title">Daily Report Web</h1>
+      <div className="grid-container-main">
+        {/* 業務内容エリア */}
+        <div className="form-area">
+          <section className="mail-work">
+            <span className="textbox-5-label">業務内容</span>
+            <div>
+              {/* タスク追加 */}
+              <TaskForm onAdd={fetchTasks} />
 
-      <div style={{ padding: "20px" }}>
-        {/* タスク追加 */}
-        <TaskForm onAdd={fetchTasks} />
+              {/* タスク一覧 */}
+              <TaskList tasks={tasks} onDelete={fetchTasks} />
+            </div>
+          </section>
 
-        {/* タスク一覧 */}
-        <TaskList tasks={tasks} onDelete={fetchTasks} />
+          <div>
+            {works.map((w) => (
+              <WorkTextbox
+                key={w.id}
+                value={w.text}
+                onChange={(e) => updateWork(w.id, e.target.value)}
+              />
+            ))}
+          </div>
+
+          {/* 本文 */}
+          <section>
+            <span className="textbox-5-label">自身の課題・問題点</span>
+            <textarea
+              className="textbox-5"
+              placeholder="本文を入力"
+              value={text1}
+              onChange={(e) => setText1(e.target.value)}
+            />
+          </section>
+          <section>
+            <span className="textbox-5-label">感想・その他</span>
+            <textarea
+              className="textbox-5"
+              placeholder="本文を入力"
+              value={text2}
+              onChange={(e) => setText2(e.target.value)}
+            />
+          </section>
+
+          {/* 送信 */}
+          <IconContext.Provider value={{ color: "#323131", size: "30px" }}>
+            <button className="send-button" onClick={sendMail}>
+              <IoMdSend />
+            </button>
+          </IconContext.Provider>
+        </div>
       </div>
 
-      {/* 業務内容エリア */}
-      <div className="form-area">
-        <label className="mail-work">
-          <span className="textbox-5-label">業務内容</span>
-          <div>
-            <IconContext.Provider value={{ size: "33px" }}>
-              <button className="work-add-button" onClick={openWindow}>
-                <FiPlusCircle />
-              </button>
-            </IconContext.Provider>
-          </div>
-        </label>
-
-        <div>
-          {works.map((w) => (
-            <WorkTextbox
-              key={w.id}
-              value={w.text}
-              onChange={(e) => updateWork(w.id, e.target.value)}
-            />
-          ))}
-        </div>
-
-        {/* 本文 */}
-        <label>
-          <span className="textbox-5-label">本文</span>
-          <textarea
-            className="textbox-5"
-            placeholder="本文を入力"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-        </label>
-
-        {/* 送信 */}
-        <IconContext.Provider value={{ color: "#323131", size: "30px" }}>
-          <button className="send-button" onClick={sendMail}>
-            <IoMdSend />
-          </button>
-        </IconContext.Provider>
+      {/* プレビュー画面 */}
+      <div className="grid-container-preview">
+        <span className="textbox-5-label">プレビュー</span>
+        <textarea
+          disabled
+          className="preview-window"
+          value={
+            content +
+            "\n\n2.自身の課題・問題点\n" +
+            text1 +
+            "\n\n3.感想・その他\n" +
+            text2
+          }
+          onChange={(e) => setContent(e.target.value)}
+        />
       </div>
     </div>
   );

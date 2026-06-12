@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { MdDelete } from "react-icons/md";
 
 function TaskList({ tasks, onDelete }) {
   return (
-    <div>
+    <div className="mail-work-list">
       {tasks.map((task) => (
-        <div key={task.id}>
+        <div key={task.id} className="task-item">
           {task.content}
           <button
+            className="mail-work-list-btn"
             onClick={async () => {
               await fetch(`http://localhost:8080/api/tasks/${task.id}`, {
                 method: "DELETE",
@@ -14,7 +16,7 @@ function TaskList({ tasks, onDelete }) {
               onDelete(); // 再取得
             }}
           >
-            削除
+            <MdDelete size={25} />
           </button>
         </div>
       ))}
