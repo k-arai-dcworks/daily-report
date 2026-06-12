@@ -154,10 +154,19 @@ body {
 
   justify-content: space-between;
   border: 2px solid;
-  padding: 0.4rem 0 0.4rem 1rem;
   border-color: #717171;
   border-radius: 1rem;
   align-items: center;
+}
+
+.task-item-content {
+  display: flex;
+  font-size: 1em;
+  height: 100%;
+  margin: 0.6rem 0 0.6rem 1rem;
+  border: none;
+  background-color: #ffffff00;
+  color: #e6e6e6;
 }
 
 .task-item:hover {

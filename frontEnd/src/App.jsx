@@ -18,6 +18,7 @@ function App() {
   // =========================
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
+  const [text3, setText3] = useState("");
   const [content, setContent] = useState(Content);
   const [tasks, setTasks] = useState([]);
   const [works, setWorks] = useState([]);
@@ -39,6 +40,16 @@ function App() {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const addTaskText = (taskContent) => {
+    setText3((prev) => {
+      // 空の場合
+      if (!prev) return taskContent;
+
+      // 改行して追加
+      return prev + "\n" + taskContent;
+    });
+  };
 
   // =========================
   // ログイン確認
@@ -136,7 +147,11 @@ function App() {
               <TaskForm onAdd={fetchTasks} />
 
               {/* タスク一覧 */}
-              <TaskList tasks={tasks} onDelete={fetchTasks} />
+              <TaskList
+                tasks={tasks}
+                onDelete={fetchTasks}
+                onSelect={addTaskText}
+              />
             </div>
           </section>
 
@@ -187,6 +202,7 @@ function App() {
           className="preview-window"
           value={
             content +
+            text3 +
             "\n\n2.自身の課題・問題点\n" +
             text1 +
             "\n\n3.感想・その他\n" +
