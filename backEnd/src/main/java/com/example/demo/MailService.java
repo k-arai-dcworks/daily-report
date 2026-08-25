@@ -34,23 +34,19 @@ public class MailService {
         try {
             System.out.println("送信内容: " + text);
 
-            // ★① 安全に取得（キャスト前提にしない）
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            // ★② OAuthじゃなければ即終了（防御）
             if (!(authentication instanceof OAuth2AuthenticationToken auth)) {
                 System.out.println("未ログインアクセス（拒否）");
                 return;
             }
 
-            // ★③ トークン取得
             OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
                     auth.getAuthorizedClientRegistrationId(),
                     auth.getName());
 
             String accessToken = client.getAccessToken().getTokenValue();
 
-            // ★④ Gmail API
             Gmail service = new Gmail.Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
                     GsonFactory.getDefaultInstance(),
@@ -58,18 +54,16 @@ public class MailService {
                     .setApplicationName("mail-app")
                     .build();
 
-            // ★⑤ メール作成
             MimeMessage email = new MimeMessage(Session.getDefaultInstance(new Properties()));
 
             email.setFrom(new InternetAddress("me"));
             email.addRecipient(
                     javax.mail.Message.RecipientType.TO,
-                    new InternetAddress("k.arai@dcworks.jp"));
+                    new InternetAddress("xxx@dcworks.jp"));
 
             email.setSubject("日報【5/25】新井一馬");
             email.setText(text);
 
-            // ★⑥ エンコード
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             email.writeTo(buffer);
 
@@ -78,7 +72,6 @@ public class MailService {
             Message message = new Message();
             message.setRaw(encodedEmail);
 
-            // ★⑦ 送信
             service.users().messages().send("me", message).execute();
 
             System.out.println("メール送信成功");
